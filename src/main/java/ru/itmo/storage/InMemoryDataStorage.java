@@ -7,56 +7,35 @@ import ru.itmo.model.User;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Some difficulties with the HashMap
+ */
+
 public class InMemoryDataStorage implements DataStorage {
 
-    private Map<String, User> clients = new HashMap<String, User>();
+    private Map<String, User> users = new HashMap<String, User>();
 
-    public void putUser(User user) throws UserAlreadyExistsException {
 
+    public void createUser(User user) throws UserAlreadyExistsException {
+        if (users.containsKey(user.getUserName())) {
+            throw new UserAlreadyExistsException("This user has already created ");
+        }
+        users.put(user.getUserName(), user);
     }
 
-    public void getUser(String username) throws NoSuchUserException {
-        return null;
-    }
-
-    public User getStatus(String status) {
-        return null;
-    }
-
-    public User getAddress(String address) {
-        return null;
-    }
-
-    public void modifyUserInfo() {
-
-    }
-
-    public void setPercent(int percent) {
-
-    }
-
-    public void allowCredit(boolean allow) {
-
-    }
-
-    public void forbidCredit(boolean forbid) {
-
-    }
-
-    public void checkPayAble(int monthlyIncome) {
-
-    }
-
-    public void getBonus(int bonus) {
-
-    }
-
-    public void makeBonus(int bonus) {
-
+    public User getUser(String username) throws NoSuchUserException {
+        if (!users.containsKey(username)) {
+            throw new NoSuchUserException("No user with such username = " + username);
+        }
+        return users.get(username);
     }
 
     public void deleteUser(String username) throws NoSuchUserException {
-
+        if (!users.containsKey(username)) {
+            throw new NoSuchUserException("No user with such username = " + username);
+        }
+        users.remove(username);
     }
+
 }
 

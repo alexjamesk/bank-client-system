@@ -2,26 +2,99 @@ package ru.itmo.model;
 
 public class User {
 
-    UserType type;
-    String userName;
-    String firstName;
-    String lastName;
-    String status;
-    String address;
-    int age;  //age of client - condition of approval credit or deposit
-    int term; //The term of client's credit
-    int monthlyIncome; //How much money client earn ia a month - it is the main condition of approval of credit
-    int monthlyPay; //How much money exactly client need to pay for a credit
-    int creditPercent;
-    int depositPercent;
-    int depositAccountBalance;
-    int creditAccountBalance;
-    String approval;
-    String denial;
-    int overpayment;
-    int underpayment;
-    int allBankClients;
-    int allBankMoney;
-    int bonus; // if client has no underpayments and has VIP-status, he can get bonus -1% of years
-    int clientId;
+    private UserType type;
+    private String username;
+    private String firstName;
+    private String lastName;
+    private String status;
+    private String address;
+    private int age;
+    private double monthlyIncome;
+    private double bonus;
+    private int clientId;
+
+    public User(String username, UserType type) {
+        this.username = username;
+        this.type = type;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
+    }
+
+    public String getUserName() {
+        return username;
+    }
+
+    public void setUserName(String userName) {
+        this.username = userName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public double getMonthlyIncome() {
+        return monthlyIncome;
+    }
+
+    public void setMonthlyIncome(double monthlyIncome) {
+        this.monthlyIncome = monthlyIncome;
+    }
+
+    public double getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(double bonus) {
+        this.bonus = bonus;
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
 }
