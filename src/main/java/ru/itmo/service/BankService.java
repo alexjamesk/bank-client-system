@@ -4,9 +4,10 @@ import ru.itmo.exception.NoSuchUserException;
 import ru.itmo.exception.UserAlreadyExistsException;
 import ru.itmo.model.User;
 import ru.itmo.model.UserType;
-import ru.itmo.storage.*;
+import ru.itmo.storage.DataStorage;
+import ru.itmo.storage.InMemoryDataStorage;
 
-public class BankService implements DataStorage {
+public class BankService {
     private User loggedInUser;
     private DataStorage dataStorage;
 
@@ -14,63 +15,46 @@ public class BankService implements DataStorage {
         this.dataStorage = new InMemoryDataStorage();
     }
 
-    String login(String username) {
-
-    }
-
-    void logout(String username) {
-
-    }
-
-    String createUser(String username, UserType type) throws UserAlreadyExistsException {
+    public String login(String username) {
+        try {
+            this.loggedInUser = dataStorage.getUser(username);
+        } catch (NoSuchUserException exception) {
+            return "User doesn't exist";
+        }
         return "Success";
     }
 
-    public void putUser(User user) throws UserAlreadyExistsException {
-
+    public void logout(String username) {
+        this.loggedInUser = null;
     }
 
-    public void getUser(String username) throws NoSuchUserException {
+    public String createUser(String username, UserType type) {
+        if (!checkLoggedInUserWorker()) {
+            return "Logged in user has no rights to create new users";
+        }
+        User newUser = new User(username, type);
+        try {
+            dataStorage.createUser(newUser);
+        } catch (UserAlreadyExistsException e) {
+            return "User with such username already exists";
+        }
+        return "Success";
     }
 
-    public User getStatus(String status) {
-        return null;
+    public String deleteUser(String username) {
+        if (!checkLoggedInUserWorker()) {
+            return "Logged in user has no rights to delete new users";
+        }
+        try {
+            dataStorage.deleteUser(username);
+        } catch (NoSuchUserException e) {
+            return "User with such username doesn't exist";
+        }
+        return "Success";
     }
 
-    public User getAddress(String address) {
-        return null;
+    private boolean checkLoggedInUserWorker() {
+        return UserType.WORKER.equals(loggedInUser.getType());
     }
-
-    public void modifyUserInfo() {
-
-    }
-
-    public void setPercent(int percent) {
-    }
-
-    public void allowCredit(boolean allow) {
-
-    }
-
-    public void forbidCredit(boolean forbid) {
-
-    }
-
-    public void checkPayAble(int monthlyIncome) {
-
-    }
-
-    public void getBonus(int bonus) {
-
-    }
-
-    public void makeBonus(int bonus) {
-
-    }
-
-    public void deleteUser(String username) throws NoSuchUserException {
-
-    }
-
 
 }
