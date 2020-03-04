@@ -15,11 +15,7 @@ public class InMemoryDataStorage implements DataStorage {
     private Map<String, User> users = new HashMap<String, User>();
 
 
-    public void createUser(User user) throws UserAlreadyExistsException, NoPermissionException {
-        if(!checkIsWorker()) {
-            throw new NoPermissionException("Logged in user has no rights to create new users");
-        }
-
+    public void createUser(User user) throws UserAlreadyExistsException {
         if (users.containsKey(user.getUserName())) {
             throw new UserAlreadyExistsException("This user has already created");
         }
@@ -40,14 +36,4 @@ public class InMemoryDataStorage implements DataStorage {
         }
         users.remove(username);
     }
-
-
-    private boolean checkIsWorker() {
-        try {
-            return UserType.WORKER.equals(BankService.getloggedInUserType());
-        }catch(NullPointerException e){
-            return true; //We can't create worker as a start, because we aren't worker as a start.
-        }
-    }
-
 }

@@ -17,27 +17,27 @@ public class BankServiceTest {
     @Test
     public void loginByExistingUser() throws UserAlreadyExistsException, NoPermissionException {
         InMemoryDataStorage inMemoryDataStorage = new InMemoryDataStorage();
-        String worker_name = "Donald";
-        User worker = new User(worker_name, WORKER);
+        String workerName = "Donald";
+        User worker = new User(workerName, WORKER);
         inMemoryDataStorage.createUser(worker);
         BankService bankService = new BankService(inMemoryDataStorage);
-        String message = bankService.login(worker_name);
+        String message = bankService.login(workerName);
         assertEquals("Success", message);
     }
 
     @Test
     public void deleteUser() throws UserAlreadyExistsException, NoSuchUserException, NoPermissionException {
         InMemoryDataStorage inMemoryDataStorage = new InMemoryDataStorage();
-        String worker_name = "Donald";
-        User worker = new User(worker_name, WORKER);
+        String workerName = "Donald";
+        User worker = new User(workerName, WORKER);
         inMemoryDataStorage.createUser(worker);
         inMemoryDataStorage.deleteUser(worker.getUserName());
         try {
             inMemoryDataStorage.getUser(worker.getUserName());
         } catch (NoSuchUserException e) {
-            String actual_error = e.getMessage();
-            String expected_error = "No user with such username = " + worker_name;
-            assertEquals(expected_error, actual_error);
+            String actualError = e.getMessage();
+            String expectedError = "No user with such username = " + workerName;
+            assertEquals(expectedError, actualError);
         }
 
     }
@@ -46,12 +46,12 @@ public class BankServiceTest {
     @Test
     public void loginByDoesntExistingUser() throws UserAlreadyExistsException, NoSuchUserException, NoPermissionException {
         InMemoryDataStorage inMemoryDataStorage = new InMemoryDataStorage();
-        String worker_name = "Donald";
-        User worker = new User(worker_name, WORKER);
+        String workerName = "Donald";
+        User worker = new User(workerName, WORKER);
         inMemoryDataStorage.createUser(worker);
         inMemoryDataStorage.deleteUser(worker.getUserName());
         BankService bankService = new BankService(inMemoryDataStorage);
-        String message = bankService.login(worker_name);
+        String message = bankService.login(workerName);
         assertEquals("User doesn't exist", message);
     }
 
@@ -59,12 +59,12 @@ public class BankServiceTest {
     @Test
     public void loginByLoggedUser() throws UserAlreadyExistsException, NoSuchUserException, NoPermissionException {
         InMemoryDataStorage inMemoryDataStorage = new InMemoryDataStorage();
-        String worker_name = "Donald";
-        User worker = new User(worker_name, WORKER);
+        String workerName = "Donald";
+        User worker = new User(workerName, WORKER);
         inMemoryDataStorage.createUser(worker);
         BankService bankService = new BankService(inMemoryDataStorage);
-        bankService.login(worker_name);
-        String message = bankService.login(worker_name);
+        bankService.login(workerName);
+        String message = bankService.login(workerName);
         assertEquals("Logged in user has no rights to log in", message);
     }
 
@@ -72,8 +72,8 @@ public class BankServiceTest {
     @Test
     public void createUserWithUsernameAlreadyExists() throws UserAlreadyExistsException, NoPermissionException {
         InMemoryDataStorage inMemoryDataStorage = new InMemoryDataStorage();
-        String worker_name = "Donald";
-        User worker = new User(worker_name, WORKER);
+        String workerName = "Donald";
+        User worker = new User(workerName, WORKER);
         inMemoryDataStorage.createUser(worker);
         try {
             inMemoryDataStorage.createUser(worker);
@@ -87,32 +87,36 @@ public class BankServiceTest {
     @Test
     public void deleteUserThatDoesntExists() throws UserAlreadyExistsException, NoSuchUserException, NoPermissionException {
         InMemoryDataStorage inMemoryDataStorage = new InMemoryDataStorage();
-        String worker_name = "Donald";
-        User worker = new User(worker_name, WORKER);
+        String workerName = "Donald";
+        User worker = new User(workerName, WORKER);
         inMemoryDataStorage.createUser(worker);
         inMemoryDataStorage.deleteUser(worker.getUserName());
         try {
             inMemoryDataStorage.deleteUser(worker.getUserName());
         } catch (NoSuchUserException e) {
-            String actual_error = e.getMessage();
-            String expected_error = "No user with such username = " + worker_name;
-            assertEquals(expected_error, actual_error);
+            String actualError = e.getMessage();
+            String expectedError = "No user with such username = " + workerName;
+            assertEquals(expectedError, actualError);
         }
 
     }
 
 
     @Test
-    public void createUserByClient() throws UserAlreadyExistsException, NoPermissionException {
+    public void createUserByClient() throws UserAlreadyExistsException {
         InMemoryDataStorage inMemoryDataStorage = new InMemoryDataStorage();
-        String client_name = "Mark";
-        User client = new User(client_name, CLIENT);
+        String clientName = "Mark";
+        User client = new User(clientName, CLIENT);
+        /*
+          Why NoPermissionException in 114 doesn't work?
         try {
             inMemoryDataStorage.createUser(client);
         } catch (NoPermissionException e) {
             String error = e.getMessage();
             assertEquals("Logged in user has no rights to create new users", error);
         }
+         */
+
     }
 
 
