@@ -3,13 +3,12 @@ package ru.itmo.storage;
 import ru.itmo.exception.NoSuchUserException;
 import ru.itmo.exception.UserAlreadyExistsException;
 import ru.itmo.model.User;
+import ru.itmo.model.UserType;
+import ru.itmo.service.BankService;
 
+import javax.naming.NoPermissionException;
 import java.util.HashMap;
 import java.util.Map;
-
-/**
- * Some difficulties with the HashMap
- */
 
 public class InMemoryDataStorage implements DataStorage {
 
@@ -18,9 +17,10 @@ public class InMemoryDataStorage implements DataStorage {
 
     public void createUser(User user) throws UserAlreadyExistsException {
         if (users.containsKey(user.getUserName())) {
-            throw new UserAlreadyExistsException("This user has already created ");
+            throw new UserAlreadyExistsException("This user has already created");
         }
         users.put(user.getUserName(), user);
+
     }
 
     public User getUser(String username) throws NoSuchUserException {
@@ -36,6 +36,4 @@ public class InMemoryDataStorage implements DataStorage {
         }
         users.remove(username);
     }
-
 }
-

@@ -7,6 +7,8 @@ import ru.itmo.model.UserType;
 import ru.itmo.storage.DataStorage;
 import ru.itmo.storage.InMemoryDataStorage;
 
+import javax.naming.NoPermissionException;
+
 public class BankService {
     private User loggedInUser;
     private DataStorage dataStorage;
@@ -15,13 +17,22 @@ public class BankService {
         this.dataStorage = new InMemoryDataStorage();
     }
 
+    BankService(DataStorage dataStorage) {
+        this.dataStorage = dataStorage;
+    }
+
     public String login(String username) {
-        try {
-            this.loggedInUser = dataStorage.getUser(username);
-        } catch (NoSuchUserException exception) {
-            return "User doesn't exist";
+
+        if (loggedInUser!=null) {
+            return "Can't login: some user is already logged in";
+        } else {
+            try {
+                this.loggedInUser = dataStorage.getUser(username);
+                return "Success";
+            } catch (NoSuchUserException exception) {
+                return "User doesn't exist";
+            }
         }
-        return "Success";
     }
 
     public void logout(String username) {
@@ -29,20 +40,20 @@ public class BankService {
     }
 
     public String createUser(String username, UserType type) {
-        if (!checkLoggedInUserWorker()) {
+        if (!isLoggedInUserWorker()) {
             return "Logged in user has no rights to create new users";
         }
         User newUser = new User(username, type);
         try {
             dataStorage.createUser(newUser);
-        } catch (UserAlreadyExistsException e) {
+        } catch (UserAlreadyExistsException | NoPermissionException e) {
             return "User with such username already exists";
         }
         return "Success";
     }
 
     public String deleteUser(String username) {
-        if (!checkLoggedInUserWorker()) {
+        if (!isLoggedInUserWorker()) {
             return "Logged in user has no rights to delete new users";
         }
         try {
@@ -53,8 +64,20 @@ public class BankService {
         return "Success";
     }
 
-    private boolean checkLoggedInUserWorker() {
+    private boolean isLoggedInUserWorker() {
         return UserType.WORKER.equals(loggedInUser.getType());
     }
 
+   // private boolean isUserLoggedIn(String username){
+   //     if (loggedInUser == null) {
+   //         return false;
+   //     }
+   //     System.out.println(username+"+"+loggedInUser.getUserName());
+    //    if(username.equals(loggedInUser.getUserName())){
+    //        //After deleting User: LoggedInUser.getUserName already get previous username...
+    //        return true;
+     //   }else{
+     //     return false;
+      //  }
+    //}
 }
